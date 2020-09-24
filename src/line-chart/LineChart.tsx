@@ -259,7 +259,8 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
     height,
     paddingTop,
     paddingRight,
-    onDataPointClick
+    onDataPointClick,
+    selectedindex
   }: Pick<
     AbstractChartConfig,
     "data" | "width" | "height" | "paddingRight" | "paddingTop"
@@ -313,11 +314,7 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
             key={Math.random()}
             cx={cx}
             cy={cy}
-            fill={
-              typeof getDotColor === "function"
-                ? getDotColor(x, i)
-                : this.getColor(dataset, 0.9)
-            }
+            fill={selectedindex===i?this.props.chartConfig.activeDotColor:this.props.chartConfig.inActiveDotColor}
             onPress={onPress}
             {...this.getPropsForDots(x, i)}
           />,
@@ -326,7 +323,7 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
             cx={cx}
             cy={cy}
             r="14"
-            fill="#fff"
+            fill={selectedindex===i?this.props.chartConfig.activeDotColor:this.props.chartConfig.inActiveDotColor}
             fillOpacity={0}
             onPress={onPress}
           />,
@@ -805,7 +802,8 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
       formatXLabel = xLabel => xLabel,
       segments,
       transparent = false,
-      chartConfig
+      chartConfig,
+      selectedindex
     } = this.props;
 
     const { scrollableDotHorizontalOffset } = this.state;
@@ -910,7 +908,10 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
                   labels,
                   paddingTop: paddingTop as number,
                   paddingRight: paddingRight as number,
-                  formatXLabel
+                  formatXLabel,
+                  selectedindex,
+                  onDataPointClick,
+                  activeLabelBottomLineColor:this.props.chartConfig.activeLabelBottomLineColor
                 })}
             </G>
             <G>
@@ -939,7 +940,8 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
                   data: data.datasets,
                   paddingTop: paddingTop as number,
                   paddingRight: paddingRight as number,
-                  onDataPointClick
+                  onDataPointClick,
+                  selectedindex
                 })}
             </G>
             <G>

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Defs, Line, LinearGradient, Stop, Text } from "react-native-svg";
+import { Defs, Line, LinearGradient, Stop, Text, Rect, Svg, G } from "react-native-svg";
 
 import { ChartConfig, Dataset, PartialBy } from "./HelperTypes";
 
@@ -221,7 +221,10 @@ class AbstractChart<
     horizontalOffset = 0,
     stackedBar = false,
     verticalLabelRotation = 0,
-    formatXLabel = xLabel => xLabel
+    formatXLabel = xLabel => xLabel,
+    selectedindex=0,
+    onDataPointClick,
+    activeLabelBottomLineColor
   }: Pick<
     AbstractChartConfig,
     | "labels"
@@ -261,7 +264,9 @@ class AbstractChart<
       const y = (height * 3) / 4 + paddingTop + fontSize * 2 + xLabelsOffset;
 
       return (
+        <>
         <Text
+          onPress={()=>onDataPointClick({index:i})}
           origin={`${x}, ${y}`}
           rotation={verticalLabelRotation}
           key={Math.random()}
@@ -273,6 +278,15 @@ class AbstractChart<
         >
           {`${formatXLabel(label)}${xAxisLabel}`}
         </Text>
+        {selectedindex===i&&<Rect
+        x={x-12}
+        y={y+5}
+        width="25"
+        height="50"
+        fill={activeLabelBottomLineColor}
+        strokeWidth="3"
+      />}
+        </>
       );
     });
   };
